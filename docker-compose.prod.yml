@@ -1,0 +1,36 @@
+services:
+  # En production, la base de données n'est plus jamais exposée sur l'hôte :
+  # seuls les conteneurs du réseau interne (api, adminer) peuvent la joindre.
+  db:
+    ports: !reset []
+
+  api:
+    environment:
+      NODE_ENV: production
+    ports: !reset []
+
+  # Adminer reste utile pour du dépannage ponctuel, mais ne doit jamais être
+  # accessible publiquement. Il est désactivé par défaut (profile "debug") et,
+  # si activé, n'écoute que sur 127.0.0.1 : on y accède via un tunnel SSH.
+  adminer:
+    profiles: ['debug']
+    ports:
+      - '127.0.0.1:8081:8080'
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./dist:/srv:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

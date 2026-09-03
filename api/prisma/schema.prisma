@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  gestionnaire
+  utilisateur
+}
+
+enum ArticleStatut {
+  disponible
+  desactive
+}
+
+enum MouvementType {
+  entree
+  sortie
+}
+
+enum DemandeStatut {
+  en_attente
+  approuvee
+  rejetee
+}
+
+model User {
+  id           String   @id @default(uuid())
+  nom          String
+  email        String   @unique
+  passwordHash String
+  poste        String
+  role         Role
+  actif        Boolean  @default(true)
+  mustChangePassword Boolean @default(false)
+  createdAt    DateTime @default(now())
+
+  demandesFaites   Demande[]        @relation("Demandeur")
+  demandesTraitees Demande[]        @relation("Traitant")
+  mouvements       Mouvement[]
+  programmes       ProgrammeMembre[]
+}
+
+model Programme {
+  id        String   @id @default(uuid())
+  nom       String
+  code      String?  @unique
+  actif     Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  membres  ProgrammeMembre[]
+  articles Article[]
+  demandes Demande[]
+}
+
+model ProgrammeMembre {
+  id          String    @id @default(uuid())
+  programme   Programme @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+  programmeId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  createdAt   DateTime  @default(now())
+
+  @@unique([programmeId, userId])
+}
+
+model Article {
+  id            String        @id @default(uuid())
+  reference     String        @unique
+  designation   String
+  categorie     String
+  unite         String
+  stock         Int           @default(0)
+  seuil         Int           @default(0)
+  statut        ArticleStatut @default(disponible)
+  dateCreation  DateTime      @default(now())
+  programme     Programme     @relation(fields: [programmeId], references: [id])
+  programmeId   String
+
+  mouvements    Mouvement[]
+  demandeLignes DemandeLigne[]
+}
+
+model Mouvement {
+  id            String        @id @default(uuid())
+  type          MouvementType
+  article       Article       @relation(fields: [articleId], references: [id])
+  articleId     String
+  quantite      Int
+  date          DateTime      @default(now())
+  provenance    String?
+  beneficiaire  String?
+  document      String?
+  utilisateur   User          @relation(fields: [utilisateurId], references: [id])
+  utilisateurId String
+  observation   String        @default("")
+}
+
+model Demande {
+  id            String        @id @default(uuid())
+  numero        String        @unique
+  demandeur     User          @relation("Demandeur", fields: [demandeurId], references: [id])
+  demandeurId   String
+  programme     Programme     @relation(fields: [programmeId], references: [id])
+  programmeId   String
+  date          DateTime      @default(now())
+  motif         String        @default("")
+  statut        DemandeStatut @default(en_attente)
+  traitant      User?         @relation("Traitant", fields: [traiteParId], references: [id])
+  traiteParId   String?
+  dateTraitement DateTime?
+  bonNumero     String?
+  motifRejet    String?
+
+  lignes        DemandeLigne[]
+}
+
+model DemandeLigne {
+  id        String  @id @default(uuid())
+  demande   Demande @relation(fields: [demandeId], references: [id], onDelete: Cascade)
+  demandeId String
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId String
+  quantite  Int
+}

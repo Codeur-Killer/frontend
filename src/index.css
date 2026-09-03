@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-sans/700.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+@theme {
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --color-ink: #1d2b45;
+  --color-ink-2: #14203a;
+  --color-muted: #656e81;
+
+  --color-gold: #b8862f;
+  --color-gold-2: #96691f;
+
+  --color-paper: #f3f1eb;
+  --color-paper-2: #eae7dc;
+  --color-surface: #ffffff;
+  --color-line: #e1ddd0;
+
+  --color-ok: #2f7d4f;
+  --color-ok-bg: #e7f2ea;
+  --color-warn: #c97a22;
+  --color-warn-bg: #f8ecdc;
+  --color-danger: #b23a34;
+  --color-danger-bg: #f6e6e4;
+}
+
+html {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+}
+
+body {
+  background-color: var(--color-paper);
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+::selection {
+  background-color: var(--color-gold);
+  color: var(--color-surface);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+  }
+  .print-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
