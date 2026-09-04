@@ -78,6 +78,13 @@ vrais utilisateurs.
    | `SMTP_USER` | votre login SMTP Brevo |
    | `SMTP_PASS` | votre clé SMTP Brevo |
    | `SMTP_FROM` | `G-UGP <no-reply@votre-domaine.com>` |
+   | `VAPID_PUBLIC_KEY` | générez la paire avec `cd api && npx web-push generate-vapid-keys` |
+   | `VAPID_PRIVATE_KEY` | idem, l'autre valeur de la même paire |
+   | `VAPID_SUBJECT` | `mailto:contact@votre-domaine.com` |
+
+   Notez bien la `VAPID_PUBLIC_KEY` générée : elle sera aussi nécessaire
+   côté Vercel à l'étape 4 (`VITE_VAPID_PUBLIC_KEY`, même valeur exacte —
+   sinon les abonnements aux notifications push échouent en silence).
 
    Ne définissez **pas** `PORT` — Render l'injecte automatiquement et
    l'application le respecte déjà (`process.env.PORT`).
@@ -132,8 +139,13 @@ Puis :
 1. Dashboard Vercel → **Add New** → **Project** → importez le dépôt GitHub.
 2. Vercel détecte Vite automatiquement (`npm run build`, dossier `dist`) —
    ne changez pas le Root Directory (reste la racine du dépôt).
-3. Variable d'environnement : `VITE_API_URL` = `https://gugp-api.onrender.com/api`
-   (l'URL Render notée à l'étape 2, avec `/api` à la fin).
+3. Variables d'environnement :
+
+   | Variable | Valeur |
+   |---|---|
+   | `VITE_API_URL` | `https://gugp-api.onrender.com/api` (l'URL Render de l'étape 2, avec `/api` à la fin) |
+   | `VITE_VAPID_PUBLIC_KEY` | exactement la même valeur que `VAPID_PUBLIC_KEY` sur Render (étape 2) |
+
 4. Déployez. Notez l'URL Vercel (ex. `https://g-ugp.vercel.app`).
 
 ---
@@ -178,7 +190,12 @@ redéploient chacun automatiquement leur partie.
   d'inactivité — le premier appel après une pause peut prendre 30 à 60
   secondes le temps que le service redémarre. Gênant pour un usage réel ;
   passez sur un plan payant (à partir de quelques dollars/mois) pour
-  éviter ça.
+  éviter ça. Ça affecte aussi les notifications (direct + push) : si le
+  service était en veille, la demande qui déclenche la notification le
+  réveille d'abord, donc la notification part bien mais avec ce même
+  délai de 30-60s au lieu d'être instantanée. La connexion en direct (SSE)
+  se coupe aussi à chaque mise en veille — le navigateur du gestionnaire
+  la rétablit automatiquement, sans action requise, mais avec le même délai.
 - **Render PostgreSQL (Free)** : supprimée après 90 jours. À surveiller ou
   à passer sur un plan payant avant que ça arrive.
 - **Vercel (Free)** : largement suffisant pour un frontend statique, pas

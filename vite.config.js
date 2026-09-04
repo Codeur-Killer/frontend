@@ -10,11 +10,22 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Service worker personnalisé (src/sw.js) : nécessaire pour gérer les
+      // évènements push et notificationclick, ce que le mode par défaut
+      // (generateSW) ne permet pas de faire proprement.
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.js',
+      injectManifest: {
+        // Data comes from an authenticated API and must always be fresh -
+        // only the app shell (JS/CSS/HTML/icons/fonts) is precached.
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+      },
       // Sans ceci, le manifeste et le service worker ne sont pas injectés
       // par `npm run dev` — impossible de tester l'installation avant un
       // vrai build. Sans incidence en production (registerType/manifest
       // restent la seule source de vérité une fois buildé).
-      devOptions: { enabled: true },
+      devOptions: { enabled: true, type: 'module' },
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
         name: 'G-UGP - Gestion des stocks et expressions de besoins',
@@ -37,11 +48,6 @@ export default defineConfig({
             purpose: 'maskable',
           },
         ],
-      },
-      workbox: {
-        // Data comes from an authenticated API and must always be fresh -
-        // only the app shell (JS/CSS/HTML/icons/fonts) is precached.
-        navigateFallbackDenylist: [/^\/api\//],
       },
     }),
   ],

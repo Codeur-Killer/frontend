@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Plus, Trash2, TriangleAlert, Send } from 'lucide-react'
+import { Plus, Trash2, TriangleAlert, Send, PackageX } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useAppData } from '../../context/AppDataContext'
 import PageHeader from '../../components/PageHeader'
 import Button from '../../components/Button'
+import Modal from '../../components/Modal'
 
 export default function NouvelleDemande() {
   const { currentUser } = useAuth()
@@ -18,6 +19,7 @@ export default function NouvelleDemande() {
   const [quantite, setQuantite] = useState(1)
   const [lignes, setLignes] = useState([])
   const [motif, setMotif] = useState('')
+  const [stockIssues, setStockIssues] = useState(null)
 
   // programmes se charge de façon asynchrone (après l'authentification) :
   // on ne peut pas se contenter d'un état initial à partir de useState.
@@ -64,6 +66,15 @@ export default function NouvelleDemande() {
 
   async function handleSubmit() {
     if (lignes.length === 0) return
+
+    const issues = lignes
+      .map((l) => ({ ligne: l, article: findArticle(l.articleId) }))
+      .filter(({ ligne, article }) => article && ligne.quantite > article.stock)
+    if (issues.length > 0) {
+      setStockIssues(issues)
+      return
+    }
+
     const demande = await addDemande({ demandeurId: currentUser.id, lignes, motif })
     navigate(`/app/mes-demandes/${demande.id}`)
   }
@@ -210,6 +221,29 @@ export default function NouvelleDemande() {
       </div>
         </>
       )}
+
+      <Modal open={!!stockIssues} onClose={() => setStockIssues(null)} title="Stock insuffisant">
+        <div className="flex gap-2.5">
+          <PackageX size={20} className="mt-0.5 shrink-0 text-danger" />
+          <p className="text-sm text-muted">
+            La quantité demandée dépasse le stock disponible pour {stockIssues?.length > 1 ? 'ces articles' : 'cet article'}.
+            Retirez-{stockIssues?.length > 1 ? 'les' : 'le'} ou diminuez la quantité avant de soumettre.
+          </p>
+        </div>
+        <ul className="mt-3 space-y-1.5">
+          {stockIssues?.map(({ ligne, article }) => (
+            <li key={ligne.articleId} className="flex items-center justify-between rounded-md border border-danger/30 bg-danger-bg px-3 py-2 text-sm">
+              <span className="text-ink">{article.designation}</span>
+              <span className="tabular text-danger">
+                {ligne.quantite} demandé{ligne.quantite > 1 ? 's' : ''} / {article.stock} {article.unite.toLowerCase()} disponible{article.stock > 1 ? 's' : ''}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-4 flex justify-end">
+          <Button variant="gold" onClick={() => setStockIssues(null)}>Compris</Button>
+        </div>
+      </Modal>
     </div>
   )
 }

@@ -91,6 +91,11 @@ cd /home/deploy/g-ugp
 JWT_SECRET=$(openssl rand -base64 48)
 # Génère un mot de passe DB fort
 DB_PASSWORD=$(openssl rand -base64 24)
+# Génère une paire de clés VAPID pour les notifications push (nécessite
+# d'avoir déjà fait `npm install` dans api/ au moins une fois)
+VAPID_KEYS=$(cd api && npx web-push generate-vapid-keys --json)
+VAPID_PUBLIC_KEY=$(echo "$VAPID_KEYS" | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>console.log(JSON.parse(d).publicKey))")
+VAPID_PRIVATE_KEY=$(echo "$VAPID_KEYS" | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>console.log(JSON.parse(d).privateKey))")
 
 cat > .env <<EOF
 JWT_SECRET=$JWT_SECRET
@@ -101,9 +106,13 @@ SMTP_PORT=587
 SMTP_USER=votre-login-smtp-brevo
 SMTP_PASS=votre-cle-smtp-brevo
 SMTP_FROM=G-UGP <no-reply@votre-domaine.com>
+VAPID_PUBLIC_KEY=$VAPID_PUBLIC_KEY
+VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY
+VAPID_SUBJECT=mailto:contact@votre-domaine.com
 EOF
 
 echo "Mot de passe DB généré : $DB_PASSWORD  (notez-le, ne le perdez pas)"
+echo "Clé publique VAPID (à reporter aussi dans .env.production du frontend, voir étape 5) : $VAPID_PUBLIC_KEY"
 ```
 
 L'envoi d'e-mails (création de compte, réinitialisation de mot de passe)
@@ -153,6 +162,10 @@ cp .env.production.example .env.production
 # .env.production contient VITE_API_URL=/api : le frontend appelle l'API
 # sur le même domaine via Caddy, donc aucune configuration CORS complexe
 # n'est nécessaire côté navigateur.
+# Complétez aussi VITE_VAPID_PUBLIC_KEY dans ce fichier avec la valeur
+# affichée à l'étape 4 (VAPID_PUBLIC_KEY), sinon les notifications push
+# ne pourront pas s'activer côté gestionnaire.
+nano .env.production
 
 docker run --rm -v "$(pwd)":/app -w /app node:20-alpine \
   sh -c "npm ci && npm run build"

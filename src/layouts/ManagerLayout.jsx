@@ -15,6 +15,7 @@ import { useAppData } from '../context/AppDataContext'
 import { stockLevel } from '../utils/status'
 import Sidebar from '../components/Sidebar'
 import Topbar from '../components/Topbar'
+import NotificationCenter from '../components/NotificationCenter'
 
 export default function ManagerLayout() {
   const { currentUser, loading } = useAuth()
@@ -44,6 +45,7 @@ export default function ManagerLayout() {
 
   return (
     <div className="flex h-screen bg-paper">
+      <NotificationCenter />
       <Sidebar items={items} roleLabel="Espace gestionnaire" />
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar breadcrumb={['Espace gestionnaire']} alertHref="/gestion/alertes" alertCount={alertCount} />

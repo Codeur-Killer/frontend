@@ -3,6 +3,7 @@ import { Download, Printer, FileBarChart } from 'lucide-react'
 import { useAppData } from '../../context/AppDataContext'
 import { demandeStatusConfig } from '../../utils/status'
 import { formatDate } from '../../utils/format'
+import { orgInfo } from '../../data/orgInfo'
 import PageHeader from '../../components/PageHeader'
 import StatusPill from '../../components/StatusPill'
 import Button from '../../components/Button'
@@ -28,6 +29,8 @@ export default function Rapports() {
       })
       .sort((a, b) => (a.date < b.date ? 1 : -1))
   }, [demandes, filters])
+
+  const programmeNoms = [...new Set(resultats.map((d) => d.programmeNom).filter(Boolean))]
 
   function exportCsv() {
     const header = ['Numero', 'Demandeur', 'Date', 'Articles', 'Statut', 'Validateur', 'Date de validation']
@@ -69,8 +72,29 @@ export default function Rapports() {
         }
       />
 
-      <div className="mb-2 hidden print:block">
-        <p className="text-sm font-medium text-ink">
+      <div className="mb-6 hidden print:block">
+        <div className="flex items-start justify-between gap-6">
+          <div className="text-center leading-tight">
+            <p className="font-semibold text-ink">{orgInfo.presidence}</p>
+            <p className="text-ink">{orgInfo.separateur}</p>
+            {programmeNoms.length > 0 ? (
+              <>
+                <p className="mx-auto mt-1 max-w-[280px] font-semibold uppercase text-ink">{programmeNoms.join(' / ')}</p>
+                <p className="text-ink">{orgInfo.separateur}</p>
+              </>
+            ) : null}
+            <p className="mt-3 font-semibold text-ink">{orgInfo.coordination}</p>
+            <p className="text-ink">{orgInfo.separateur}</p>
+            <p className="mt-3 font-semibold text-ink">{orgInfo.unite}</p>
+          </div>
+          <div className="shrink-0 text-center leading-tight">
+            <p className="font-semibold text-ink">{orgInfo.republique}</p>
+            <p className="text-xs font-semibold text-ink">{orgInfo.devise}</p>
+            <p className="mt-3 whitespace-nowrap font-semibold text-ink">{orgInfo.ville}, le {formatDate(new Date())}</p>
+          </div>
+        </div>
+
+        <p className="mt-8 text-center text-sm font-medium text-ink">
           Rapport des expressions de besoin
           {filters.du || filters.au ? ` - du ${filters.du ? formatDate(filters.du) : '...'} au ${filters.au ? formatDate(filters.au) : '...'}` : ''}
         </p>
