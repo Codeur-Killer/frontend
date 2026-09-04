@@ -131,6 +131,8 @@ Puis :
 
 1. Dashboard Vercel → **Add New** → **Project** → importez le dépôt GitHub.
 2. Laissez **Root Directory** vide, puisque ce dépôt contient déjà le frontend.
+  Si `gugp-front` est encore affiché, supprimez cette valeur puis cliquez sur
+  **Save** avant de relancer le déploiement.
 3. Vercel détecte Vite automatiquement (`npm run build`, dossier `dist`) et utilise Node 22 grâce au champ `engines`.
 4. Variables d'environnement :
 
