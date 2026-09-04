@@ -4,8 +4,6 @@ import { clientsClaim } from 'workbox-core'
 
 precacheAndRoute(self.__WB_MANIFEST)
 
-// Repli SPA : toute navigation (hors /api) reçoit index.html, pour que les
-// routes React Router fonctionnent en accès direct / rafraîchissement.
 registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html'), {
   denylist: [/^\/api\//],
 }))
@@ -13,10 +11,7 @@ registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html'), {
 self.skipWaiting()
 clientsClaim()
 
-// Notifications push (créées par un gestionnaire connecté sur un autre
-// poste, ou pour ce même poste quand l'onglet est fermé) — le direct SSE
-// géré par NotificationCenter.jsx ne fonctionne, lui, que si l'onglet est
-// ouvert.
+
 self.addEventListener('push', (event) => {
   if (!event.data) return
   let data
