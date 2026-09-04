@@ -101,10 +101,7 @@ cat > .env <<EOF
 JWT_SECRET=$JWT_SECRET
 CORS_ORIGIN=https://votre-domaine.com
 APP_URL=https://votre-domaine.com
-SMTP_HOST=smtp-relay.brevo.com
-SMTP_PORT=587
-SMTP_USER=votre-login-smtp-brevo
-SMTP_PASS=votre-cle-smtp-brevo
+BREVO_API_KEY=xkeysib-votre-cle-api-v3
 SMTP_FROM=G-UGP <no-reply@votre-domaine.com>
 VAPID_PUBLIC_KEY=$VAPID_PUBLIC_KEY
 VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY
@@ -116,17 +113,16 @@ echo "Clé publique VAPID (à reporter aussi dans .env.production du frontend, v
 ```
 
 L'envoi d'e-mails (création de compte, réinitialisation de mot de passe)
-utilise [Brevo](https://app.brevo.com) en relais SMTP :
+utilise [Brevo](https://app.brevo.com) via son API HTTP HTTPS (port 443) :
 
 1. Créez un compte Brevo (l'offre gratuite suffit largement pour ce volume).
 2. Dans **Senders, Domains & Dedicated IPs → Senders**, ajoutez et validez
-   l'adresse utilisée comme `SMTP_FROM` (Brevo refuse d'envoyer depuis une
-   adresse non vérifiée).
-3. Dans **SMTP & API → SMTP**, récupérez le "Login" (→ `SMTP_USER`) et
-   générez une clé SMTP (→ `SMTP_PASS`, différente du mot de passe de votre
-   compte Brevo).
+  l'adresse utilisée comme `SMTP_FROM` (Brevo refuse d'envoyer depuis une
+  adresse non vérifiée).
+3. Dans **SMTP & API → API Keys**, créez une clé API v3 et copiez-la dans
+  `BREVO_API_KEY`. L'application l'utilise via HTTPS, sans connexion SMTP.
 
-⚠️ **Sans `SMTP_HOST` configuré, aucun e-mail n'est envoyé** : le mot de
+⚠️ **Sans `BREVO_API_KEY` configuré, aucun e-mail n'est envoyé** : le mot de
 passe temporaire est alors renvoyé dans la réponse de l'API et affiché à
 l'admin dans l'interface — pratique en développement, mais à éviter en
 production puisque le mot de passe transite alors uniquement via l'écran

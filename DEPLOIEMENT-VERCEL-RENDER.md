@@ -73,10 +73,7 @@ vrais utilisateurs.
    | `JWT_SECRET` | générez-en un fort : `openssl rand -base64 48` |
    | `CORS_ORIGIN` | laissez vide pour l'instant, à renseigner à l'étape 5 |
    | `APP_URL` | idem, à renseigner à l'étape 5 |
-   | `SMTP_HOST` | `smtp-relay.brevo.com` |
-   | `SMTP_PORT` | `587` |
-   | `SMTP_USER` | votre login SMTP Brevo |
-   | `SMTP_PASS` | votre clé SMTP Brevo |
+  | `BREVO_API_KEY` | votre clé API Brevo v3 (`xkeysib-...`) |
    | `SMTP_FROM` | `G-UGP <no-reply@votre-domaine.com>` |
    | `VAPID_PUBLIC_KEY` | générez la paire avec `cd api && npx web-push generate-vapid-keys` |
    | `VAPID_PRIVATE_KEY` | idem, l'autre valeur de la même paire |
@@ -86,7 +83,8 @@ vrais utilisateurs.
    côté Vercel à l'étape 4 (`VITE_VAPID_PUBLIC_KEY`, même valeur exacte —
    sinon les abonnements aux notifications push échouent en silence).
 
-   Ne définissez **pas** `PORT` — Render l'injecte automatiquement et
+  `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` et `SMTP_PASS` ne sont pas nécessaires
+  avec l'API HTTP Brevo. Ne définissez **pas** `PORT` — Render l'injecte automatiquement et
    l'application le respecte déjà (`process.env.PORT`).
 
 6. Déployez. Une fois en ligne, notez l'URL Render (ex.
