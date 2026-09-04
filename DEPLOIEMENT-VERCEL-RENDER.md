@@ -24,7 +24,7 @@ passer via un domaine unique.
   pas encore un dépôt git — initialisez-le et poussez-le avant de continuer :
 
 ```bash
-cd "c:\Users\PURS\Downloads\g-ugp-frontend\g-ugp"
+cd "c:\Users\PURS\Downloads\g-ugp"
 git init
 git add .
 git commit -m "Initial commit"
@@ -114,19 +114,13 @@ l'accès à de vrais utilisateurs.
 
 ## 4. Déployer le frontend sur Vercel
 
-Vercel traite automatiquement tout dossier `api/` à la racine du dépôt
-comme des fonctions serverless — ce qui entrerait en conflit avec notre
-API Express (déployée séparément sur Render). Il faut lui dire de l'ignorer.
+Le frontend se trouve dans le sous-dossier `gugp-front`. Dans les paramètres
+du projet Vercel, définissez **Root Directory** sur `gugp-front`. Vercel
+utilisera alors le `package.json`, `index.html` et `vite.config.js` du frontend
+et exécutera correctement `npm run build`.
 
-Deux fichiers à ajouter au projet (déjà créés par cette session, vérifiez
-qu'ils sont commités) :
-
-**`.vercelignore`** (à la racine) :
-```
-api
-```
-
-**`vercel.json`** (à la racine) — nécessaire pour que les routes React
+Le fichier `vercel.json` doit rester dans `gugp-front`, qui est le répertoire
+racine configuré pour Vercel — il est nécessaire pour que les routes React
 Router (ex. `/gestion/articles`) ne renvoient pas une 404 au rafraîchissement :
 ```json
 {
@@ -137,16 +131,16 @@ Router (ex. `/gestion/articles`) ne renvoient pas une 404 au rafraîchissement :
 Puis :
 
 1. Dashboard Vercel → **Add New** → **Project** → importez le dépôt GitHub.
-2. Vercel détecte Vite automatiquement (`npm run build`, dossier `dist`) —
-   ne changez pas le Root Directory (reste la racine du dépôt).
-3. Variables d'environnement :
+2. Dans **Root Directory**, sélectionnez `gugp-front`.
+3. Vercel détecte Vite automatiquement (`npm run build`, dossier `dist`).
+4. Variables d'environnement :
 
    | Variable | Valeur |
    |---|---|
    | `VITE_API_URL` | `https://gugp-api.onrender.com/api` (l'URL Render de l'étape 2, avec `/api` à la fin) |
    | `VITE_VAPID_PUBLIC_KEY` | exactement la même valeur que `VAPID_PUBLIC_KEY` sur Render (étape 2) |
 
-4. Déployez. Notez l'URL Vercel (ex. `https://g-ugp.vercel.app`).
+5. Déployez. Notez l'URL Vercel (ex. `https://g-ugp.vercel.app`).
 
 ---
 
