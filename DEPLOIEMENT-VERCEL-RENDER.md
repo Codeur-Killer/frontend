@@ -114,13 +114,12 @@ l'accès à de vrais utilisateurs.
 
 ## 4. Déployer le frontend sur Vercel
 
-Le frontend se trouve dans le sous-dossier `gugp-front`. Dans les paramètres
-du projet Vercel, définissez **Root Directory** sur `gugp-front`. Vercel
-utilisera alors le `package.json`, `index.html` et `vite.config.js` du frontend
-et exécutera correctement `npm run build`.
+Le dépôt GitHub utilisé par Vercel est déjà le dossier du frontend. Laissez
+**Root Directory** vide (ou utilisez la racine du dépôt). Vercel utilisera
+ainsi directement le `package.json`, `index.html` et `vite.config.js` présents
+à la racine et exécutera `npm run build` avec Node 22.
 
-Le fichier `vercel.json` doit rester dans `gugp-front`, qui est le répertoire
-racine configuré pour Vercel — il est nécessaire pour que les routes React
+Le fichier `vercel.json` est à la racine du dépôt; il est nécessaire pour que les routes React
 Router (ex. `/gestion/articles`) ne renvoient pas une 404 au rafraîchissement :
 ```json
 {
@@ -131,8 +130,8 @@ Router (ex. `/gestion/articles`) ne renvoient pas une 404 au rafraîchissement :
 Puis :
 
 1. Dashboard Vercel → **Add New** → **Project** → importez le dépôt GitHub.
-2. Dans **Root Directory**, sélectionnez `gugp-front`.
-3. Vercel détecte Vite automatiquement (`npm run build`, dossier `dist`).
+2. Laissez **Root Directory** vide, puisque ce dépôt contient déjà le frontend.
+3. Vercel détecte Vite automatiquement (`npm run build`, dossier `dist`) et utilise Node 22 grâce au champ `engines`.
 4. Variables d'environnement :
 
    | Variable | Valeur |
