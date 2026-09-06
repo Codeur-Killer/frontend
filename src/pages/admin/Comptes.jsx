@@ -159,58 +159,60 @@ export default function Comptes() {
         <EmptyState icon={UserCog} title="Aucun compte ne correspond" description="Modifiez les filtres ou créez un nouveau compte." />
       ) : (
         <div className="overflow-hidden rounded-lg border border-line bg-surface">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-line text-left text-xs text-muted">
-                <th className="px-4 py-2.5 font-medium">Nom</th>
-                <th className="px-4 py-2.5 font-medium">E-mail</th>
-                <th className="px-4 py-2.5 font-medium">Poste</th>
-                <th className="px-4 py-2.5 font-medium">Programme(s)</th>
-                <th className="px-4 py-2.5 font-medium">Rôle</th>
-                <th className="px-4 py-2.5 font-medium">Statut</th>
-                <th className="px-4 py-2.5"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtres.map((u) => (
-                <tr key={u.id} className="border-b border-line last:border-0 hover:bg-paper/60">
-                  <td className="px-4 py-2.5 font-medium text-ink">{u.nom}</td>
-                  <td className="px-4 py-2.5 font-mono text-xs text-muted">{u.email}</td>
-                  <td className="px-4 py-2.5 text-ink">{u.poste}</td>
-                  <td className="px-4 py-2.5 text-muted">
-                    {u.role === 'admin'
-                      ? 'Tous'
-                      : (u.programmeIds || []).map((id) => findProgramme(id)?.nom).filter(Boolean).join(', ') || '-'}
-                  </td>
-                  <td className="px-4 py-2.5">
-                    <StatusPill config={roleConfig[u.role]} size="sm" />
-                  </td>
-                  <td className="px-4 py-2.5">
-                    <StatusPill config={userStatusConfig[String(u.actif)]} size="sm" />
-                  </td>
-                  <td className="px-4 py-2.5">
-                    <div className="flex justify-end gap-1">
-                      <button onClick={() => openEdit(u)} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Modifier">
-                        <Pencil size={15} />
-                      </button>
-                      <button onClick={() => openReset(u)} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Réinitialiser le mot de passe" title="Réinitialiser le mot de passe">
-                        <KeyRound size={15} />
-                      </button>
-                      <button
-                        onClick={() => handleToggleActive(u)}
-                        disabled={u.id === currentUser.id}
-                        className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
-                        aria-label={u.actif ? 'Désactiver' : 'Activer'}
-                        title={u.id === currentUser.id ? 'Impossible de désactiver votre propre compte' : u.actif ? 'Désactiver' : 'Activer'}
-                      >
-                        {u.actif ? <PowerOff size={15} /> : <Power size={15} />}
-                      </button>
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[900px]">
+              <thead>
+                <tr className="border-b border-line text-left text-xs text-muted">
+                  <th className="px-4 py-2.5 font-medium">Nom</th>
+                  <th className="px-4 py-2.5 font-medium">E-mail</th>
+                  <th className="px-4 py-2.5 font-medium">Poste</th>
+                  <th className="px-4 py-2.5 font-medium">Programme(s)</th>
+                  <th className="px-4 py-2.5 font-medium">Rôle</th>
+                  <th className="px-4 py-2.5 font-medium">Statut</th>
+                  <th className="px-4 py-2.5"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtres.map((u) => (
+                  <tr key={u.id} className="border-b border-line last:border-0 hover:bg-paper/60">
+                    <td className="px-4 py-2.5 font-medium text-ink">{u.nom}</td>
+                    <td className="px-4 py-2.5 font-mono text-xs text-muted">{u.email}</td>
+                    <td className="px-4 py-2.5 text-ink">{u.poste}</td>
+                    <td className="px-4 py-2.5 text-muted">
+                      {u.role === 'admin'
+                        ? 'Tous'
+                        : (u.programmeIds || []).map((id) => findProgramme(id)?.nom).filter(Boolean).join(', ') || '-'}
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <StatusPill config={roleConfig[u.role]} size="sm" />
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <StatusPill config={userStatusConfig[String(u.actif)]} size="sm" />
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <div className="flex justify-end gap-1">
+                        <button onClick={() => openEdit(u)} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Modifier">
+                          <Pencil size={15} />
+                        </button>
+                        <button onClick={() => openReset(u)} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Réinitialiser le mot de passe" title="Réinitialiser le mot de passe">
+                          <KeyRound size={15} />
+                        </button>
+                        <button
+                          onClick={() => handleToggleActive(u)}
+                          disabled={u.id === currentUser.id}
+                          className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
+                          aria-label={u.actif ? 'Désactiver' : 'Activer'}
+                          title={u.id === currentUser.id ? 'Impossible de désactiver votre propre compte' : u.actif ? 'Désactiver' : 'Activer'}
+                        >
+                          {u.actif ? <PowerOff size={15} /> : <Power size={15} />}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

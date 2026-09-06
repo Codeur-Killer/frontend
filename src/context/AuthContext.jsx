@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import * as authApi from '../api/authApi'
-import { getToken, setToken } from '../api/httpClient'
+import { getToken, setToken, getTokenFromCookie } from '../api/httpClient'
 
 const AuthContext = createContext(null)
 
@@ -11,9 +11,14 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     let cancelled = false
     async function restore() {
-      if (!getToken()) {
+      const token = getTokenFromCookie() || getToken()
+      if (!token) {
         setLoading(false)
         return
+      }
+      // Sync localStorage with cookie if cookie exists
+      if (getTokenFromCookie() && !getToken()) {
+        setToken(token)
       }
       try {
         const user = await authApi.me()

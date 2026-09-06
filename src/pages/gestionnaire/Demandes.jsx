@@ -63,62 +63,64 @@ export default function Demandes() {
         <EmptyState icon={ClipboardCheck} title="Rien à traiter ici" description="Les demandes correspondant à ce filtre apparaîtront dans cette liste." />
       ) : (
         <div className="overflow-hidden rounded-lg border border-line bg-surface">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-line text-left text-xs text-muted">
-                <th className="px-4 py-2.5 font-medium">Numéro</th>
-                <th className="px-4 py-2.5 font-medium">Demandeur</th>
-                <th className="px-4 py-2.5 font-medium">Date</th>
-                <th className="px-4 py-2.5 font-medium">Articles</th>
-                <th className="px-4 py-2.5 font-medium">Statut</th>
-                <th className="px-4 py-2.5"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {visible.map((d) => {
-                const demandeur = findUser(d.demandeurId)
-                return (
-                  <tr key={d.id} className="border-b border-line last:border-0 hover:bg-paper/60">
-                    <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-ink">{d.numero}</td>
-                    <td className="px-4 py-2.5">
-                      <p className="font-medium text-ink">{demandeur?.nom}</p>
-                      <p className="text-xs text-muted">{demandeur?.poste}</p>
-                    </td>
-                    <td className="px-4 py-2.5 text-muted">{formatDate(d.date)}</td>
-                    <td className="px-4 py-2.5 text-muted">
-                      {d.lignes.map((l) => findArticle(l.articleId)?.designation).filter(Boolean).join(', ')}
-                    </td>
-                    <td className="px-4 py-2.5">
-                      <StatusPill config={demandeStatusConfig[d.statut]} size="sm" />
-                    </td>
-                    <td className="px-4 py-2.5">
-                      <div className="flex items-center justify-end gap-1.5">
-                        {d.statut === 'en_attente' ? (
-                          <>
-                            <button
-                              onClick={() => handleApprove(d.id)}
-                              className="inline-flex items-center gap-1 rounded-md border border-ok/30 px-2 py-1 text-xs font-medium text-ok hover:bg-ok-bg"
-                            >
-                              <Check size={13} /> Approuver
-                            </button>
-                            <button
-                              onClick={() => setRejectTarget(d)}
-                              className="inline-flex items-center gap-1 rounded-md border border-danger/30 px-2 py-1 text-xs font-medium text-danger hover:bg-danger-bg"
-                            >
-                              <X size={13} /> Rejeter
-                            </button>
-                          </>
-                        ) : null}
-                        <Link to={`/gestion/demandes/${d.id}`} className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-ink hover:text-gold">
-                          Détail <ChevronRight size={13} />
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[700px]">
+              <thead>
+                <tr className="border-b border-line text-left text-xs text-muted">
+                  <th className="px-4 py-2.5 font-medium">Numéro</th>
+                  <th className="px-4 py-2.5 font-medium">Demandeur</th>
+                  <th className="px-4 py-2.5 font-medium">Date</th>
+                  <th className="px-4 py-2.5 font-medium">Articles</th>
+                  <th className="px-4 py-2.5 font-medium">Statut</th>
+                  <th className="px-4 py-2.5"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {visible.map((d) => {
+                  const demandeur = findUser(d.demandeurId)
+                  return (
+                    <tr key={d.id} className="border-b border-line last:border-0 hover:bg-paper/60">
+                      <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-ink">{d.numero}</td>
+                      <td className="px-4 py-2.5">
+                        <p className="font-medium text-ink">{demandeur?.nom}</p>
+                        <p className="text-xs text-muted">{demandeur?.poste}</p>
+                      </td>
+                      <td className="px-4 py-2.5 text-muted">{formatDate(d.date)}</td>
+                      <td className="px-4 py-2.5 text-muted">
+                        {d.lignes.map((l) => findArticle(l.articleId)?.designation).filter(Boolean).join(', ')}
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <StatusPill config={demandeStatusConfig[d.statut]} size="sm" />
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {d.statut === 'en_attente' ? (
+                            <>
+                              <button
+                                onClick={() => handleApprove(d.id)}
+                                className="inline-flex items-center gap-1 rounded-md border border-ok/30 px-2 py-1 text-xs font-medium text-ok hover:bg-ok-bg"
+                              >
+                                <Check size={13} /> Approuver
+                              </button>
+                              <button
+                                onClick={() => setRejectTarget(d)}
+                                className="inline-flex items-center gap-1 rounded-md border border-danger/30 px-2 py-1 text-xs font-medium text-danger hover:bg-danger-bg"
+                              >
+                                <X size={13} /> Rejeter
+                              </button>
+                            </>
+                          ) : null}
+                          <Link to={`/gestion/demandes/${d.id}`} className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-ink hover:text-gold">
+                            Détail <ChevronRight size={13} />
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

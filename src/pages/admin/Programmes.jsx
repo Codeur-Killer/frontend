@@ -87,47 +87,49 @@ export default function Programmes() {
         <EmptyState icon={FolderKanban} title="Aucun programme" description="Créez le premier programme pour commencer à y rattacher des articles." />
       ) : (
         <div className="overflow-hidden rounded-lg border border-line bg-surface">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-line text-left text-xs text-muted">
-                <th className="px-4 py-2.5 font-medium">Programme</th>
-                <th className="px-4 py-2.5 font-medium">Code</th>
-                <th className="px-4 py-2.5 font-medium">Gestionnaires</th>
-                <th className="px-4 py-2.5 font-medium">Utilisateurs</th>
-                <th className="px-4 py-2.5 font-medium">Statut</th>
-                <th className="px-4 py-2.5"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {programmes.map((p) => {
-                const gestionnaires = p.membres.filter((m) => m.user.role === 'gestionnaire')
-                const utilisateurs = p.membres.filter((m) => m.user.role === 'utilisateur')
-                return (
-                  <tr key={p.id} className="border-b border-line last:border-0 hover:bg-paper/60">
-                    <td className="max-w-xs px-4 py-2.5 font-medium text-ink">{p.nom}</td>
-                    <td className="px-4 py-2.5 font-mono text-xs text-muted">{p.code || '-'}</td>
-                    <td className="px-4 py-2.5 text-muted">{gestionnaires.length}</td>
-                    <td className="px-4 py-2.5 text-muted">{utilisateurs.length}</td>
-                    <td className="px-4 py-2.5">
-                      <button onClick={() => handleToggleActif(p)}>
-                        <StatusPill config={statutConfig[String(p.actif)]} size="sm" />
-                      </button>
-                    </td>
-                    <td className="px-4 py-2.5">
-                      <div className="flex justify-end gap-1">
-                        <button onClick={() => setMembresTarget(p)} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Gérer les membres" title="Gérer les membres">
-                          <Users2 size={15} />
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[700px]">
+              <thead>
+                <tr className="border-b border-line text-left text-xs text-muted">
+                  <th className="px-4 py-2.5 font-medium">Programme</th>
+                  <th className="px-4 py-2.5 font-medium">Code</th>
+                  <th className="px-4 py-2.5 font-medium">Gestionnaires</th>
+                  <th className="px-4 py-2.5 font-medium">Utilisateurs</th>
+                  <th className="px-4 py-2.5 font-medium">Statut</th>
+                  <th className="px-4 py-2.5"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {programmes.map((p) => {
+                  const gestionnaires = p.membres.filter((m) => m.user.role === 'gestionnaire')
+                  const utilisateurs = p.membres.filter((m) => m.user.role === 'utilisateur')
+                  return (
+                    <tr key={p.id} className="border-b border-line last:border-0 hover:bg-paper/60">
+                      <td className="max-w-xs px-4 py-2.5 font-medium text-ink">{p.nom}</td>
+                      <td className="px-4 py-2.5 font-mono text-xs text-muted">{p.code || '-'}</td>
+                      <td className="px-4 py-2.5 text-muted">{gestionnaires.length}</td>
+                      <td className="px-4 py-2.5 text-muted">{utilisateurs.length}</td>
+                      <td className="px-4 py-2.5">
+                        <button onClick={() => handleToggleActif(p)}>
+                          <StatusPill config={statutConfig[String(p.actif)]} size="sm" />
                         </button>
-                        <button onClick={() => openEdit(p)} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Modifier">
-                          <Pencil size={15} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <div className="flex justify-end gap-1">
+                          <button onClick={() => setMembresTarget(p)} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Gérer les membres" title="Gérer les membres">
+                            <Users2 size={15} />
+                          </button>
+                          <button onClick={() => openEdit(p)} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Modifier">
+                            <Pencil size={15} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

@@ -107,32 +107,34 @@ export default function StockEntrees() {
           <div className="border-b border-line px-4 py-2.5">
             <p className="text-sm font-medium text-ink">Historique des entrées</p>
           </div>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-line text-left text-xs text-muted">
-                <th className="px-4 py-2 font-medium">Date</th>
-                <th className="px-4 py-2 font-medium">Article</th>
-                <th className="px-4 py-2 font-medium text-right">Quantité</th>
-                <th className="px-4 py-2 font-medium">Provenance</th>
-                <th className="px-4 py-2 font-medium">Document</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entrees.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-sm text-muted">Aucune entrée enregistrée.</td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[700px]">
+              <thead>
+                <tr className="border-b border-line text-left text-xs text-muted">
+                  <th className="px-4 py-2 font-medium">Date</th>
+                  <th className="px-4 py-2 font-medium">Article</th>
+                  <th className="px-4 py-2 font-medium text-right">Quantité</th>
+                  <th className="px-4 py-2 font-medium">Provenance</th>
+                  <th className="px-4 py-2 font-medium">Document</th>
                 </tr>
-              ) : entrees.map((m) => (
-                <tr key={m.id} className="border-b border-line last:border-0">
-                  <td className="whitespace-nowrap px-4 py-2 text-muted">{formatDate(m.date)}</td>
-                  <td className="px-4 py-2 text-ink">{findArticle(m.articleId)?.designation}</td>
-                  <td className="px-4 py-2 text-right tabular font-medium text-ok">+{m.quantite}</td>
-                  <td className="px-4 py-2 text-muted">{m.provenance || '-'}</td>
-                  <td className="px-4 py-2 font-mono text-xs text-muted">{m.document || '-'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {entrees.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="px-4 py-8 text-center text-sm text-muted">Aucune entrée enregistrée.</td>
+                  </tr>
+                ) : entrees.map((m) => (
+                  <tr key={m.id} className="border-b border-line last:border-0">
+                    <td className="whitespace-nowrap px-4 py-2 text-muted">{formatDate(m.date)}</td>
+                    <td className="px-4 py-2 text-ink">{findArticle(m.articleId)?.designation}</td>
+                    <td className="px-4 py-2 text-right tabular font-medium text-ok">+{m.quantite}</td>
+                    <td className="px-4 py-2 text-muted">{m.provenance || '-'}</td>
+                    <td className="px-4 py-2 font-mono text-xs text-muted">{m.document || '-'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

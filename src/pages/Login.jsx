@@ -53,14 +53,23 @@ export default function Login() {
         <p className="text-sm text-white/60">Gestion des stocks et expressions de besoins.</p>
       </div>
 
-      <div className="flex flex-1 items-center justify-center px-6 py-12">
+      <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6 sm:py-12">
         <div className="w-full max-w-sm">
+          <div className="mb-6 lg:hidden flex items-center gap-2.5">
+            <svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true">
+              <rect width="64" height="64" rx="14" fill="#F3F1EB" fillOpacity="0.1" />
+              <path d="M18 20h16l12 12-16 16-12-12V20z" fill="none" stroke="#F3F1EB" strokeWidth="3.5" strokeLinejoin="round" />
+              <circle cx="24" cy="26" r="2.8" fill="#D9A64E" />
+            </svg>
+            <span className="text-lg font-semibold text-ink">G-UGP</span>
+          </div>
+
           <h1 className="text-xl font-semibold text-ink">Connexion</h1>
           <p className="mt-1.5 text-sm text-muted">
             Connectez-vous avec les identifiants fournis par votre administrateur.
           </p>
 
-          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          <form onSubmit={handleSubmit} className="mt-6 sm:mt-8 space-y-4">
             <div>
               <label className="mb-1 block text-xs text-muted">Adresse e-mail</label>
               <input

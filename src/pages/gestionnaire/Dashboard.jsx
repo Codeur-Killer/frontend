@@ -52,26 +52,26 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-2 divide-x divide-line overflow-hidden rounded-lg border border-line bg-surface sm:grid-cols-3 lg:grid-cols-6">
         {stats.map((s) => (
-          <Link key={s.label} to={s.href} className="px-4 py-4 transition-colors hover:bg-paper-2">
-            <p className="text-2xl font-semibold tabular text-ink">{s.value}</p>
-            <p className="mt-0.5 text-xs text-muted">{s.label}</p>
+          <Link key={s.label} to={s.href} className="px-3 py-3 sm:px-4 sm:py-4 transition-colors hover:bg-paper-2">
+            <p className="text-xl sm:text-2xl font-semibold tabular text-ink">{s.value}</p>
+            <p className="mt-0.5 text-[0.65rem] sm:text-xs text-muted">{s.label}</p>
           </Link>
         ))}
       </div>
 
       <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-5">
-        <div className="lg:col-span-3 rounded-lg border border-line bg-surface p-5">
+        <div className="lg:col-span-3 rounded-lg border border-line bg-surface p-4 sm:p-5">
           <p className="mb-4 text-sm font-medium text-ink">Entrées et sorties par mois</p>
           {chartData.length === 0 ? (
             <p className="py-10 text-center text-sm text-muted">Aucun mouvement enregistré.</p>
           ) : (
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer width="100%" height={200} minHeight={200}>
               <LineChart data={chartData} margin={{ left: -18, right: 8 }}>
                 <CartesianGrid stroke="#E1DDD0" vertical={false} />
-                <XAxis dataKey="label" tick={{ fontSize: 12, fill: '#656e81' }} axisLine={{ stroke: '#E1DDD0' }} tickLine={false} />
-                <YAxis tick={{ fontSize: 12, fill: '#656e81' }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="label" tick={{ fontSize: 11, fill: '#656e81' }} axisLine={{ stroke: '#E1DDD0' }} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: '#656e81' }} axisLine={false} tickLine={false} />
                 <Tooltip
-                  contentStyle={{ borderRadius: 8, borderColor: '#E1DDD0', fontSize: 13 }}
+                  contentStyle={{ borderRadius: 8, borderColor: '#E1DDD0', fontSize: 12 }}
                   labelStyle={{ color: '#1D2B45', fontWeight: 600 }}
                 />
                 <Line type="monotone" dataKey="entrees" name="Entrées" stroke="#2F7D4F" strokeWidth={2} dot={{ r: 3 }} />
@@ -81,7 +81,7 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="lg:col-span-2 rounded-lg border border-line bg-surface p-5">
+        <div className="lg:col-span-2 rounded-lg border border-line bg-surface p-4 sm:p-5">
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm font-medium text-ink">Demandes en attente</p>
             <Link to="/gestion/demandes" className="flex items-center gap-1 text-xs font-medium text-gold hover:text-gold-2">
@@ -110,7 +110,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="mt-5 rounded-lg border border-line bg-surface p-5">
+      <div className="mt-5 rounded-lg border border-line bg-surface p-4 sm:p-5">
         <div className="mb-3 flex items-center justify-between">
           <p className="text-sm font-medium text-ink">Articles en alerte de seuil</p>
           <Link to="/gestion/alertes" className="flex items-center gap-1 text-xs font-medium text-gold hover:text-gold-2">

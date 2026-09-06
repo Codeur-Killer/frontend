@@ -49,7 +49,7 @@ export default function ManagerLayout() {
       <Sidebar items={items} roleLabel="Espace gestionnaire" />
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar breadcrumb={['Espace gestionnaire']} alertHref="/gestion/alertes" alertCount={alertCount} />
-        <main className="flex-1 overflow-y-auto px-8 py-7">
+        <main className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
           <Outlet />
         </main>
       </div>

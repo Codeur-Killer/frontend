@@ -63,43 +63,45 @@ export default function Catalogue() {
         />
       ) : (
         <div className="overflow-hidden rounded-lg border border-line bg-surface">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-line text-left text-xs text-muted">
-                <th className="px-4 py-2.5 font-medium">Référence</th>
-                <th className="px-4 py-2.5 font-medium">Désignation</th>
-                <th className="px-4 py-2.5 font-medium">Catégorie</th>
-                <th className="px-4 py-2.5 font-medium">Unité</th>
-                <th className="px-4 py-2.5 font-medium">Disponibilité</th>
-                <th className="px-4 py-2.5"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtres.map((a) => {
-                const level = stockLevel(a.stock, a.seuil)
-                return (
-                  <tr key={a.id} className="border-b border-line last:border-0 hover:bg-paper/60">
-                    <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-muted">{a.reference}</td>
-                    <td className="px-4 py-2.5 font-medium text-ink">{a.designation}</td>
-                    <td className="px-4 py-2.5 text-muted">{a.categorie}</td>
-                    <td className="px-4 py-2.5 text-muted">{a.unite}</td>
-                    <td className="px-4 py-2.5">
-                      <StatusPill config={stockLevelConfig[level]} size="sm" />
-                    </td>
-                    <td className="px-4 py-2.5 text-right">
-                      <button
-                        onClick={() => navigate(`/app/nouvelle-demande?article=${a.id}`)}
-                        className="inline-flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1.5 text-xs font-medium text-ink hover:border-ink/40"
-                      >
-                        <PackagePlus size={14} />
-                        Ajouter à une demande
-                      </button>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[600px]">
+              <thead>
+                <tr className="border-b border-line text-left text-xs text-muted">
+                  <th className="px-4 py-2.5 font-medium">Référence</th>
+                  <th className="px-4 py-2.5 font-medium">Désignation</th>
+                  <th className="px-4 py-2.5 font-medium">Catégorie</th>
+                  <th className="px-4 py-2.5 font-medium">Unité</th>
+                  <th className="px-4 py-2.5 font-medium">Disponibilité</th>
+                  <th className="px-4 py-2.5"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtres.map((a) => {
+                  const level = stockLevel(a.stock, a.seuil)
+                  return (
+                    <tr key={a.id} className="border-b border-line last:border-0 hover:bg-paper/60">
+                      <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-muted">{a.reference}</td>
+                      <td className="px-4 py-2.5 font-medium text-ink">{a.designation}</td>
+                      <td className="px-4 py-2.5 text-muted">{a.categorie}</td>
+                      <td className="px-4 py-2.5 text-muted">{a.unite}</td>
+                      <td className="px-4 py-2.5">
+                        <StatusPill config={stockLevelConfig[level]} size="sm" />
+                      </td>
+                      <td className="px-4 py-2.5 text-right">
+                        <button
+                          onClick={() => navigate(`/app/nouvelle-demande?article=${a.id}`)}
+                          className="inline-flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1.5 text-xs font-medium text-ink hover:border-ink/40"
+                        >
+                          <PackagePlus size={14} />
+                          Ajouter à une demande
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

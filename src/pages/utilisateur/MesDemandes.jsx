@@ -52,53 +52,55 @@ export default function MesDemandes() {
         />
       ) : (
         <div className="overflow-hidden rounded-lg border border-line bg-surface">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-line text-left text-xs text-muted">
-                <th className="px-4 py-2.5 font-medium">Numéro</th>
-                <th className="px-4 py-2.5 font-medium">Date</th>
-                <th className="px-4 py-2.5 font-medium">Articles</th>
-                <th className="px-4 py-2.5 font-medium">Statut</th>
-                <th className="px-4 py-2.5"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {visible.map((d) => (
-                <tr key={d.id} className="border-b border-line last:border-0 hover:bg-paper/60">
-                  <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-ink">{d.numero}</td>
-                  <td className="px-4 py-2.5 text-muted">{formatDate(d.date)}</td>
-                  <td className="px-4 py-2.5 text-muted">
-                    {d.lignes.length} article{d.lignes.length > 1 ? 's' : ''}
-                    <span className="ml-1 text-xs text-muted/70">
-                      ({d.lignes.map((l) => findArticle(l.articleId)?.designation).filter(Boolean).join(', ')})
-                    </span>
-                  </td>
-                  <td className="px-4 py-2.5">
-                    <StatusPill config={demandeStatusConfig[d.statut]} size="sm" />
-                  </td>
-                  <td className="px-4 py-2.5 text-right">
-                    <div className="flex items-center justify-end gap-3">
-                      {d.statut === 'approuvee' ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[700px]">
+              <thead>
+                <tr className="border-b border-line text-left text-xs text-muted">
+                  <th className="px-4 py-2.5 font-medium">Numéro</th>
+                  <th className="px-4 py-2.5 font-medium">Date</th>
+                  <th className="px-4 py-2.5 font-medium">Articles</th>
+                  <th className="px-4 py-2.5 font-medium">Statut</th>
+                  <th className="px-4 py-2.5"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {visible.map((d) => (
+                  <tr key={d.id} className="border-b border-line last:border-0 hover:bg-paper/60">
+                    <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-ink">{d.numero}</td>
+                    <td className="px-4 py-2.5 text-muted">{formatDate(d.date)}</td>
+                    <td className="px-4 py-2.5 text-muted">
+                      {d.lignes.length} article{d.lignes.length > 1 ? 's' : ''}
+                      <span className="ml-1 text-xs text-muted/70">
+                        ({d.lignes.map((l) => findArticle(l.articleId)?.designation).filter(Boolean).join(', ')})
+                      </span>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <StatusPill config={demandeStatusConfig[d.statut]} size="sm" />
+                    </td>
+                    <td className="px-4 py-2.5 text-right">
+                      <div className="flex items-center justify-end gap-3">
+                        {d.statut === 'approuvee' ? (
+                          <Link
+                            to={`/bon/${d.id}`}
+                            target="_blank"
+                            className="inline-flex items-center gap-1 text-sm font-medium text-ink hover:text-gold"
+                          >
+                            <FileCheck2 size={14} /> Bon
+                          </Link>
+                        ) : null}
                         <Link
-                          to={`/bon/${d.id}`}
-                          target="_blank"
+                          to={`/app/mes-demandes/${d.id}`}
                           className="inline-flex items-center gap-1 text-sm font-medium text-ink hover:text-gold"
                         >
-                          <FileCheck2 size={14} /> Bon
+                          Détail <ChevronRight size={15} />
                         </Link>
-                      ) : null}
-                      <Link
-                        to={`/app/mes-demandes/${d.id}`}
-                        className="inline-flex items-center gap-1 text-sm font-medium text-ink hover:text-gold"
-                      >
-                        Détail <ChevronRight size={15} />
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

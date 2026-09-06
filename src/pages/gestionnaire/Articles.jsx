@@ -124,63 +124,65 @@ export default function Articles() {
         <EmptyState icon={PackageSearch} title="Aucun article ne correspond" description="Modifiez les filtres ou créez un nouvel article." />
       ) : (
         <div className="overflow-hidden rounded-lg border border-line bg-surface">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-line text-left text-xs text-muted">
-                <th className="px-4 py-2.5 font-medium">Référence</th>
-                <th className="px-4 py-2.5 font-medium">Désignation</th>
-                <th className="px-4 py-2.5 font-medium">Programme</th>
-                <th className="px-4 py-2.5 font-medium">Catégorie</th>
-                <th className="px-4 py-2.5 font-medium text-right">Stock</th>
-                <th className="px-4 py-2.5 font-medium text-right">Seuil</th>
-                <th className="px-4 py-2.5 font-medium">Niveau</th>
-                <th className="px-4 py-2.5 font-medium">Statut</th>
-                <th className="px-4 py-2.5"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtres.map((a) => {
-                const level = stockLevel(a.stock, a.seuil)
-                return (
-                  <tr key={a.id} className="border-b border-line last:border-0 hover:bg-paper/60">
-                    <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-muted">{a.reference}</td>
-                    <td className="px-4 py-2.5">
-                      <Link to={`/gestion/articles/${a.id}`} className="font-medium text-ink hover:text-gold">{a.designation}</Link>
-                      <p className="text-xs text-muted">{a.unite} · créé le {formatDate(a.dateCreation)}</p>
-                    </td>
-                    <td className="px-4 py-2.5 text-muted">{findProgramme(a.programmeId)?.nom || '-'}</td>
-                    <td className="px-4 py-2.5 text-muted">{a.categorie}</td>
-                    <td className="px-4 py-2.5 text-right tabular text-ink">{a.stock}</td>
-                    <td className="px-4 py-2.5 text-right tabular text-muted">{a.seuil}</td>
-                    <td className="px-4 py-2.5">
-                      {a.statut === 'disponible' ? <StatusPill config={stockLevelConfig[level]} size="sm" /> : <span className="text-xs text-muted">-</span>}
-                    </td>
-                    <td className="px-4 py-2.5">
-                      <StatusPill config={articleStatusConfig[a.statut]} size="sm" />
-                    </td>
-                    <td className="px-4 py-2.5">
-                      <div className="flex justify-end gap-1">
-                        <Link to={`/gestion/articles/${a.id}`} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Détail" title="Détail">
-                          <ChevronRight size={15} />
-                        </Link>
-                        <button onClick={() => openEdit(a)} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Modifier">
-                          <Pencil size={15} />
-                        </button>
-                        <button
-                          onClick={() => toggleArticleStatus(a.id)}
-                          className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink"
-                          aria-label={a.statut === 'disponible' ? 'Désactiver' : 'Activer'}
-                          title={a.statut === 'disponible' ? 'Désactiver' : 'Activer'}
-                        >
-                          {a.statut === 'disponible' ? <PowerOff size={15} /> : <Power size={15} />}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[800px]">
+              <thead>
+                <tr className="border-b border-line text-left text-xs text-muted">
+                  <th className="px-4 py-2.5 font-medium">Référence</th>
+                  <th className="px-4 py-2.5 font-medium">Désignation</th>
+                  <th className="px-4 py-2.5 font-medium">Programme</th>
+                  <th className="px-4 py-2.5 font-medium">Catégorie</th>
+                  <th className="px-4 py-2.5 font-medium text-right">Stock</th>
+                  <th className="px-4 py-2.5 font-medium text-right">Seuil</th>
+                  <th className="px-4 py-2.5 font-medium">Niveau</th>
+                  <th className="px-4 py-2.5 font-medium">Statut</th>
+                  <th className="px-4 py-2.5"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtres.map((a) => {
+                  const level = stockLevel(a.stock, a.seuil)
+                  return (
+                    <tr key={a.id} className="border-b border-line last:border-0 hover:bg-paper/60">
+                      <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-muted">{a.reference}</td>
+                      <td className="px-4 py-2.5">
+                        <Link to={`/gestion/articles/${a.id}`} className="font-medium text-ink hover:text-gold">{a.designation}</Link>
+                        <p className="text-xs text-muted">{a.unite} · créé le {formatDate(a.dateCreation)}</p>
+                      </td>
+                      <td className="px-4 py-2.5 text-muted">{findProgramme(a.programmeId)?.nom || '-'}</td>
+                      <td className="px-4 py-2.5 text-muted">{a.categorie}</td>
+                      <td className="px-4 py-2.5 text-right tabular text-ink">{a.stock}</td>
+                      <td className="px-4 py-2.5 text-right tabular text-muted">{a.seuil}</td>
+                      <td className="px-4 py-2.5">
+                        {a.statut === 'disponible' ? <StatusPill config={stockLevelConfig[level]} size="sm" /> : <span className="text-xs text-muted">-</span>}
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <StatusPill config={articleStatusConfig[a.statut]} size="sm" />
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <div className="flex justify-end gap-1">
+                          <Link to={`/gestion/articles/${a.id}`} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Détail" title="Détail">
+                            <ChevronRight size={15} />
+                          </Link>
+                          <button onClick={() => openEdit(a)} className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Modifier">
+                            <Pencil size={15} />
+                          </button>
+                          <button
+                            onClick={() => toggleArticleStatus(a.id)}
+                            className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink"
+                            aria-label={a.statut === 'disponible' ? 'Désactiver' : 'Activer'}
+                            title={a.statut === 'disponible' ? 'Désactiver' : 'Activer'}
+                          >
+                            {a.statut === 'disponible' ? <PowerOff size={15} /> : <Power size={15} />}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
