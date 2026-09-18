@@ -58,8 +58,8 @@ export default function Rapports() {
   return (
     <div>
       <PageHeader
-        title="Rapports et exports"
-        description="Filtrez les expressions de besoin selon une période ou d'autres critères, puis exportez les résultats."
+        title=""
+        description=""
         actions={
           <>
             <Button variant="secondary" icon={Download} onClick={exportCsv} className="print:hidden">
@@ -79,7 +79,7 @@ export default function Rapports() {
             <p className="text-ink">{orgInfo.separateur}</p>
             {programmeNoms.length > 0 ? (
               <>
-                <p className="mx-auto mt-1 max-w-[280px] font-semibold uppercase text-ink">{programmeNoms.join(' / ')}</p>
+                <p className="mx-auto mt-1 max-w-[280px] font-semibold uppercase text-ink">{orgInfo.purs}</p>
                 <p className="text-ink">{orgInfo.separateur}</p>
               </>
             ) : null}
