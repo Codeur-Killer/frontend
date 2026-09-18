@@ -69,7 +69,7 @@ export default function BonPrint() {
             const article = findArticle(ligne.articleId)
             return (
               <li key={ligne.articleId} className="text-ink">
-                {numberToWordsFr(ligne.quantite)} ({article?.unite}) {article?.designation}
+                {numberToWordsFr(ligne.quantite)} {article?.designation}
               </li>
             )
           })}
