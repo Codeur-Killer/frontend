@@ -45,7 +45,7 @@ export default function BonPrint() {
           <div className="text-center leading-tight">
             <p className="font-semibold text-ink">{orgInfo.presidence}</p>
             <p className="text-ink">{orgInfo.separateur}</p>
-            <p className="mx-auto mt-1 max-w-[280px] font-semibold uppercase text-ink">{demande.programmeNom}</p>
+            <p className="mx-auto mt-1 max-w-[280px] font-semibold uppercase text-ink">{orgInfo.purs}</p>
             <p className="text-ink">{orgInfo.separateur}</p>
             <p className="mt-3 font-semibold text-ink">{orgInfo.coordination}</p>
             <p className="text-ink">{orgInfo.separateur}</p>
@@ -69,7 +69,7 @@ export default function BonPrint() {
             const article = findArticle(ligne.articleId)
             return (
               <li key={ligne.articleId} className="text-ink">
-                {numberToWordsFr(ligne.quantite)} ({ligne.quantite} {article?.unite}) {article?.designation}
+                {numberToWordsFr(ligne.quantite)} ({article?.unite}) {article?.designation}
               </li>
             )
           })}
